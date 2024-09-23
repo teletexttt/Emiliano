@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Peronómetro</title>
+    <style>
+        body {
+            background-color: #0000FF; /* Fondo azul */
+            color: #FFFFFF; /* Texto blanco */
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            flex-direction: column;
+        }
+        .container {
+            text-align: center;
+        }
+        h1 {
+            font-family: "Old English Text MT", serif;
+            font-size: 48px; /* Tamaño de la tipografía del título */
+        }
+        .question {
+            font-family: "Old English Text MT", serif;
+            font-size: 24px; /* Tamaño de la tipografía de las preguntas */
+            margin-bottom: 20px;
+        }
+        .option {
+            display: block;
+            margin: 10px 0;
+            padding: 10px;
+            background-color: #FFFFFF; /* Fondo blanco para opciones */
+            color: #0000FF; /* Texto azul para opciones */
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        .option:hover {
+            background-color: #0000FF; /* Fondo azul oscuro al pasar el ratón */
+            color: #FFFFFF;
+        }
+        .result {
+            margin-top: 20px;
+            font-size: 24px; /* Tamaño de la tipografía del resultado */
+        }
+        img {
+            max-width: 50%;
+            height: auto;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Peronómetro</h1>
+        <img src="peron.png" alt="Imagen de Juan Domingo Perón">
+        <div id="quiz-container">
+            <!-- Preguntas y opciones se cargarán aquí -->
+        </div>
+        <div id="result" class="result"></div>
+    </div>
+
+    <script>
+        const questions = [
+            {
+                question: "¿Cuáles de estas son comidas peronistas?",
+                options: ["Milanesa con Puré", "Asado", "Choripán", "Empanadas", "Sushi", "Pastel de papas"],
+                correctAnswer: [0, 2, 3]
+            },
+            {
+                question: "¿Cuál de estas es una frase peronista?",
+                options: ["'Donde existe una necesidad, nace un derecho.'", "'La patria es el otro.'", "'Ni yanquis ni marxistas, Mileistas.'"],
+                correctAnswer: [0, 1]
+            },
+            {
+                question: "¿Cuál de estas es una frase bien peronista?",
+                options: ["Compañero/a", "Culiado", "Amigacho"],
+                correctAnswer: [0]
+            }
+        ];
+
+        let currentQuestionIndex = 0;
+        let score = 0;
+
+        function loadQuestion() {
+            const quizContainer = document.getElementById('quiz-container');
+            quizContainer.innerHTML = '';
+
+            if (currentQuestionIndex < questions.length) {
+                const question = questions[currentQuestionIndex];
+                const questionElement = document.createElement('div');
+                questionElement.className = 'question';
+                questionElement.textContent = question.question;
+                quizContainer.appendChild(questionElement);
+
+                question.options.forEach((option, index) => {
+                    const optionButton = document.createElement('button');
+                    optionButton.className = 'option';
+                    optionButton.textContent = option;
+                    optionButton.onclick = () => checkAnswer(index);
+                    quizContainer.appendChild(optionButton);
+                });
+            } else {
+                showResult();
+            }
+        }
+
+        function checkAnswer(selectedIndex) {
+            const correctAnswers = questions[currentQuestionIndex].correctAnswer;
+            if (correctAnswers.includes(selectedIndex)) {
+                score++;
+            }
+            currentQuestionIndex++;
+            loadQuestion();
+        }
+
+        function showResult() {
+            const quizContainer = document.getElementById('quiz-container');
+            quizContainer.innerHTML = '';
+            const resultContainer = document.getElementById('result');
+            const percentage = Math.round((score / questions.length) * 100);
+            resultContainer.textContent = `Tu nivel de peronismo en sangre es de un ${percentage}%.`;
+        }
+
+        // Cargar la primera pregunta al iniciar
+        loadQuestion();
+    </script>
+</body>
+</html>
